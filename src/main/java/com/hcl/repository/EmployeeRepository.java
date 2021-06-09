@@ -9,4 +9,6 @@ import com.hcl.model.Employee;
 public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 
 	
+
+	
 }

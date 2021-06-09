@@ -8,11 +8,12 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.GenericGenerator;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -27,9 +28,11 @@ import lombok.NoArgsConstructor;
 @Table(name = "employees")
 public class Employee {
 	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int emp_no;
+	@Id	
+	@Column(name = "emp_no")
+	@GeneratedValue(generator = "increment")
+	@GenericGenerator(name = "increment",strategy = "increment")
+	private Integer emp_no;
 	
 	@Column(name = "birth_date")
 	@JsonFormat(pattern = "yyyy-MM-dd")
@@ -48,12 +51,12 @@ public class Employee {
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	private LocalDate hire_date;
 	
-	@OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY, orphanRemoval = false)
-	@JoinColumn(name="emp_no")
+	@OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,orphanRemoval = true)
+	@JoinColumn(name="emp_no",updatable = false, insertable = false)
 	private List<Titles> titlesList;	
 	
-	@OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER,orphanRemoval = false)
-	@JoinColumn(name="emp_no")
+	@OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER,orphanRemoval = true)
+	@JoinColumn(name="emp_no",updatable = false, insertable = false)
 	private List<Salaries> salariesList;
 
 	@Override

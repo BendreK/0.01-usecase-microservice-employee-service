@@ -6,9 +6,11 @@ import com.hcl.dto.EmployeeDto;
 
 public interface EmployeeService {
 
-	public List<EmployeeDto> getAllEmployeeList();
+	public List<EmployeeDto> getAllEmployeeList();	
 	
-	//public EmployeeDto getEmployeeById( int emp_No);
+	public String saveEmployee(EmployeeDto employeeDto);
 	
-	public EmployeeDto saveEmployee(EmployeeDto employeeDto);
+	public String deleteEmployeeById(int empNo);
+	
+	
 }

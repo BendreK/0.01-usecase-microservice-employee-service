@@ -19,9 +19,10 @@ public class TitlePk implements Serializable{
 	private static final long serialVersionUID = 1L;
 
 	
-	@Column(name = "title")
+	@Column(name = "title",nullable = false,unique = true)
 	private String title;
 	
-	@Column(name = "emp_no" )
+	
+	@Column(name = "emp_no",nullable = false,unique = true )
 	private Integer emp_no ;
 }

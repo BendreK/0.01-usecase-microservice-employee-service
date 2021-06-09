@@ -1,6 +1,8 @@
 package com.hcl.service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -11,72 +13,84 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.hcl.dto.EmployeeDto;
+import com.hcl.exception.EmployeeNotFoundException;
 import com.hcl.model.Employee;
 import com.hcl.model.Salaries;
 import com.hcl.model.Titles;
 import com.hcl.repository.EmployeeRepository;
-import com.hcl.repository.SalaryRepository;
-import com.hcl.repository.TitlesRepository;
 
 @Service
 @Transactional
 public class EmployeeServiceImpl implements EmployeeService {
-	
+
 	@Autowired
-	private EmployeeRepository employeeRepository;
-	
-	@Autowired
-	private TitlesRepository titlesRepository;
-	
-	@Autowired
-	private SalaryRepository salaryRepository;
-	
+	private EmployeeRepository employeeRepository;	
+
 	@Autowired
 	private ModelMapper modelMapper;
-	
-	
-	private static final Logger logger=LoggerFactory.getLogger(EmployeeServiceImpl.class);
+
+	private static final Logger logger = LoggerFactory.getLogger(EmployeeServiceImpl.class);
 
 	@Override
 	public List<EmployeeDto> getAllEmployeeList() {
 		logger.info("inside service of getAllEmployeeList.");
-		List<Employee> empList=employeeRepository.findAll();
-		System.out.println("List-->"+empList);
-		return empList.stream().map(emp-> modelMapper.map(emp, EmployeeDto.class)).collect(Collectors.toList());		
+		List<Employee> empList = employeeRepository.findAll();		
+		return empList.stream().map(emp -> modelMapper.map(emp, EmployeeDto.class)).collect(Collectors.toList());
 	}
 
 	@Override
-	public EmployeeDto saveEmployee(EmployeeDto employeeDto) {
-		logger.info("inside service of saveEmployee.");		
-		Employee emp= modelMapper.map(employeeDto, Employee.class);
-		Titles title= new Titles();	
-		Salaries salary= new Salaries();
-		Employee empData=employeeRepository.save(emp);
+	@Transactional
+	public String saveEmployee(EmployeeDto employeeDto) {
+		logger.info("inside service of saveEmployee.");	
+		List<Titles> title = new ArrayList<>();
+		List<Salaries> salary = new ArrayList<Salaries>();
+		Employee newEmp= new Employee();
+		newEmp.setBirth_date(employeeDto.getBirth_date());
+		newEmp.setFirst_name(employeeDto.getFirst_name());
+		newEmp.setLast_name(employeeDto.getLast_name());
+		newEmp.setGender(employeeDto.getGender());
+		newEmp.setHire_date(employeeDto.getHire_date());		
 		
-		title.setEmp_no(empData.getEmp_no());
-		title.setTitle(employeeDto.getTitlesList().get(0).getTitle());
-		title.setFrom_date(employeeDto.getTitlesList().get(0).getFrom_date());
-		title.setTo_date(employeeDto.getTitlesList().get(0).getTo_date());
-		titlesRepository.save(title);		
+		Employee empData = employeeRepository.save(newEmp);
+
+		for (Titles title1 : employeeDto.getTitlesList()) {
+			Titles tt = new Titles();
+			tt.setEmp_no(newEmp.getEmp_no());
+			tt.setTitle(title1.getTitle());
+			tt.setFrom_date(title1.getFrom_date());
+			tt.setTo_date(title1.getTo_date());
+			title.add(tt);		
+		}
+
+		for (Salaries salaries : employeeDto.getSalariesList()) {
+			Salaries ss = new Salaries();
+			ss.setEmp_no(newEmp.getEmp_no());
+			ss.setFrom_date(salaries.getFrom_date());
+			ss.setSalary(salaries.getSalary());
+			ss.setTo_date(salaries.getTo_date());
+			salary.add(ss);
+	
+		}
+		newEmp.setTitlesList(title);
+		newEmp.setSalariesList(salary);
+		System.out.println("List before save--->" + newEmp);
+	    employeeRepository.save(newEmp);
 		
-		salary.setEmp_no(empData.getEmp_no());
-		salary.setFrom_date(employeeDto.getSalariesList().get(0).getFrom_date());
-		salary.setSalary(employeeDto.getSalariesList().get(0).getSalary());
-		salary.setTo_date(employeeDto.getSalariesList().get(0).getTo_date());
-		
-		salaryRepository.save(salary);
-		
-		return modelMapper.map(empData, EmployeeDto.class);		
+	    System.out.println("List After save--->" + empData);			
+		return "Save Data Sucessfully";
 	}
 
-//	@Override
-//	public EmployeeDto getEmployeeById(int emp_No) {
-////		logger.info("inside service of getEmployeeById.");
-////		Employee emp=employeeRepository.findByEmp_No(emp_No);
-////		if(emp!=null) {
-////			return modelMapper.map(emp, EmployeeDto.class);
-////		}
-//		return null;
-//	}
+	@Override
+	public String deleteEmployeeById(int empNo) {
+		Optional<Employee> emp = employeeRepository.findById(empNo);
+		if (emp != null) {
+			employeeRepository.deleteById(empNo);
+			return "Employee deleted successfully..";
+		}
+		throw new EmployeeNotFoundException("Employee with this empNo not found to delete!..");
+
+	}
+
+
 
 }

@@ -16,12 +16,16 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode
 public class SalaryPk implements Serializable {
 
-	private static final long serialVersionUID = 1L;	
+	private static final long serialVersionUID = 1L;
 	
-	@Column(name = "emp_no" )
+	
+	@Column(name = "emp_no" ,nullable = false,unique = true)
 	private Integer emp_no ;
 	
-	@Column(name = "from_date" )
+	@Column(name = "from_date" ,nullable = false,unique = true)
 	private LocalDate from_date;
+	
+	@Column(name = "to_date",nullable = false,unique = true )
+	private LocalDate to_date;
 
 }

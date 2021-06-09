@@ -26,7 +26,7 @@ import lombok.NoArgsConstructor;
 public class Departments {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private String dept_no;
 	
 	@Column(name = "dept_name")
