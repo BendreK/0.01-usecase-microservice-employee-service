@@ -1,6 +1,7 @@
 package com.hcl.model;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 
@@ -25,4 +26,7 @@ public class TitlePk implements Serializable{
 	
 	@Column(name = "emp_no",nullable = false,unique = true )
 	private Integer emp_no ;
+	
+	@Column(name = "from_date" ,nullable = false,unique = true)
+	private LocalDate from_date;
 }

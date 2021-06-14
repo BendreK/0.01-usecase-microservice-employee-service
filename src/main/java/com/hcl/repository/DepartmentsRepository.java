@@ -8,4 +8,6 @@ import com.hcl.model.Departments;
 @Repository
 public interface DepartmentsRepository extends JpaRepository<Departments, String>{
 
+	
+
 }

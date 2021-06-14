@@ -25,7 +25,6 @@ public class SalaryPk implements Serializable {
 	@Column(name = "from_date" ,nullable = false,unique = true)
 	private LocalDate from_date;
 	
-	@Column(name = "to_date",nullable = false,unique = true )
-	private LocalDate to_date;
+	
 
 }

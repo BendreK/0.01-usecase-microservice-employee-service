@@ -11,11 +11,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+@ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@ExceptionHandler(Exception.class)
@@ -28,10 +30,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 	
 	
 	@ExceptionHandler(EmployeeNotFoundException.class)
-	public final ResponseEntity<Object> handleTrainNotFoundException(EmployeeNotFoundException cs, WebRequest request){
+	public final ResponseEntity<Object> handleEmployeeNotFoundException(EmployeeNotFoundException cs, WebRequest request){
 		List<String> details = new ArrayList<>();
 		details.add(cs.getLocalizedMessage());
-		ErrorResponse error = new ErrorResponse(" Train Not Found", details);
+		ErrorResponse error = new ErrorResponse(" Employees Not Found", details);
 		return new ResponseEntity<>(error,HttpStatus.NOT_FOUND);
 	}
 	
@@ -58,5 +60,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 	        return new ResponseEntity(error, HttpStatus.BAD_REQUEST);
 		
 	}	
+	
 
 }

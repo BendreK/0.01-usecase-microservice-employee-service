@@ -1,17 +1,10 @@
 package com.hcl.model;
 
-import java.util.List;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -26,19 +19,25 @@ import lombok.NoArgsConstructor;
 public class Departments {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
 	private String dept_no;
 	
 	@Column(name = "dept_name")
 	private String dept_name;
+
+	@Override
+	public String toString() {
+		return "Departments [dept_no=" + dept_no + ", dept_name=" + dept_name + "]";
+	}
 	
-	@OneToMany(cascade = CascadeType.ALL,orphanRemoval = false)	
-	@JoinColumn(name="dept_no")
-	private List<DeptEmp>deptEmpList;
+//	@OneToMany(cascade = CascadeType.ALL,orphanRemoval = false,mappedBy = "departments")	
+//	@JoinColumn(name="dept_no",nullable = false,updatable = false, insertable = false)
+//	private List<DeptEmp>deptEmpList;
 	
 	
-	@OneToMany(cascade = CascadeType.ALL,orphanRemoval = false)
-	@JoinColumn(name="dept_no")
-	private List<DepartmentManager> departmentManagerList;
+//	@OneToMany(cascade = CascadeType.ALL,orphanRemoval = false,mappedBy = "departments")
+//	@JoinColumn(name="dept_no",nullable = false,updatable = false, insertable = false)
+//	private List<DeptManager> departmentManagerList;
+	
+	
 	
 }

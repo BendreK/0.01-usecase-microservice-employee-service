@@ -4,13 +4,13 @@ import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
 import javax.validation.constraints.Future;
 import javax.validation.constraints.FutureOrPresent;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -24,31 +24,28 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "titles")
-@IdClass(TitlePk.class)
-public class Titles {
-	
-	
-	@Id
-	@Column(name = "emp_no")	
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	private Integer emp_no ;
-	
-	@Id	
-	@Column(name = "title",nullable = false,unique = true)
-	@NotNull(message = "Title can not be null...")
-	@ApiModelProperty(notes = "Title" ,required = true)
-	private String title;
+@Table(name = "dept_manager")
+@IdClass(DeptManagerPk.class)
+public class DeptManager {
 
+	@Id
+	@Column(name = "emp_no",nullable = false,unique = true)	
+	private Integer emp_no;
+
+	@Id	
+	@Column(name = "dept_no",nullable = false,unique = true)
+	@ApiModelProperty(notes = "Department No" ,required = true)
+	@NotNull(message = "Depatment No can not be null...")
+	private String dept_no;
 	
-	@Column(name = "from_date" )
+	@Column(name = "from_date")
 	@JsonFormat(pattern = "yyyy-MM-dd")
-	@ApiModelProperty(notes = "From Date" ,required = true)
 	@NotNull(message = "From Date can not be null...")
-	@FutureOrPresent(message = "Hire Date Should be Furture Date or Present Date")	
+	@ApiModelProperty(notes = "From Date" ,required = true)
+	@FutureOrPresent(message = "From Date Should be Furture Date or Present Date")
 	private LocalDate from_date;
 	
-	@Column(name = "to_date" )
+	@Column(name = "to_date")
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	@ApiModelProperty(notes = "To Date" ,required = true)
 	@NotNull(message = "To Date can not be null...")
@@ -56,5 +53,4 @@ public class Titles {
 	private LocalDate to_date;
 	
 
-	
 }

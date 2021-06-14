@@ -13,9 +13,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-public class DeptEmpPk implements Serializable{
+public class DeptManagerPk implements Serializable{
 
 	private static final long serialVersionUID = 1L;
+
 	@Column(name = "emp_no",nullable = false,unique = true)
 	private Integer emp_no;
 	
